@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HealthAI — Intelligent Healthcare Analytics Platform</title>
+  <meta name="description"
+    content="Enterprise-grade AI-powered healthcare analytics. Chat with your patient data, uncover insights, and make data-driven decisions with Amazon Bedrock." />
+  <meta property="og:title" content="HealthAI — Intelligent Healthcare Analytics" />
+  <meta property="og:description" content="AI-powered patient analytics powered by Amazon Bedrock and Claude." />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet" />
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+
+  <link rel="stylesheet" href="styles.css?v=1.1" />
+</head>
+
+<body>
+  <!-- Animated Background -->
+  <div class="bg-orbs" aria-hidden="true">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+
+  <!-- Top Navigation -->
+  <nav class="navbar" role="navigation" aria-label="Main navigation">
+    <div class="navbar-brand">
+      <div class="logo-icon" aria-hidden="true">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+        </svg>
+      </div>
+      <span class="logo-text">Health<span class="logo-accent">AI</span></span>
+    </div>
+
+    <div class="navbar-tabs" role="tablist" aria-label="Dashboard sections">
+      <button class="nav-tab active" id="tab-dashboard" data-tab="dashboard" role="tab" aria-selected="true"
+        aria-controls="panel-dashboard">
+        <i data-lucide="layout-dashboard" aria-hidden="true"></i>
+        <span>Dashboard</span>
+      </button>
+      <button class="nav-tab" id="tab-patients" data-tab="patients" role="tab" aria-selected="false"
+        aria-controls="panel-patients">
+        <i data-lucide="users" aria-hidden="true"></i>
+        <span>Patients</span>
+      </button>
+      <button class="nav-tab" id="tab-chat" data-tab="chat" role="tab" aria-selected="false" aria-controls="panel-chat">
+        <i data-lucide="bot" aria-hidden="true"></i>
+        <span>AI Agent</span>
+        <span class="badge-live" aria-label="Live">LIVE</span>
+      </button>
+      <button class="nav-tab" id="tab-quicksight" data-tab="quicksight" role="tab" aria-selected="false"
+        aria-controls="panel-quicksight">
+        <i data-lucide="bar-chart-2" aria-hidden="true"></i>
+        <span>QuickSight</span>
+      </button>
+    </div>
+
+    <div class="navbar-actions">
+      <div class="status-indicator" id="api-status" title="API Connection Status">
+        <span class="status-dot" id="status-dot"></span>
+        <span class="status-label" id="status-label">Connecting…</span>
+      </div>
+      <button class="btn-icon" id="btn-refresh" aria-label="Refresh data" title="Refresh data">
+        <i data-lucide="refresh-cw" aria-hidden="true"></i>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="main-content" role="main">
+
+    <!-- DASHBOARD TAB -->
+    <section id="panel-dashboard" class="tab-panel active" role="tabpanel" aria-labelledby="tab-dashboard">
+
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Healthcare Analytics</h1>
+          <p class="page-subtitle">Real-time patient insights powered by Amazon Bedrock &amp; AWS</p>
+        </div>
+        <div class="header-meta">
+          <span class="meta-badge">
+            <i data-lucide="database" aria-hidden="true"></i>
+            <span id="meta-count">— patients</span>
+          </span>
+          <span class="meta-badge">
+            <i data-lucide="cpu" aria-hidden="true"></i>
+            AWS Novo lite
+          </span>
+        </div>
+      </div>
+
+      <!-- KPI Cards -->
+      <div class="kpi-grid" id="kpi-grid" role="region" aria-label="Key Performance Indicators">
+        <div class="kpi-card" id="kpi-total" aria-label="Total Patients">
+          <div class="kpi-icon kpi-blue"><i data-lucide="users" aria-hidden="true"></i></div>
+          <div class="kpi-body">
+            <p class="kpi-label">Total Patients</p>
+            <p class="kpi-value" id="kpi-total-value">—</p>
+            <p class="kpi-delta positive"><i data-lucide="trending-up" aria-hidden="true"></i> Active Dataset</p>
+          </div>
+        </div>
+        <div class="kpi-card" id="kpi-expense" aria-label="Average Expense">
+          <div class="kpi-icon kpi-purple"><i data-lucide="dollar-sign" aria-hidden="true"></i></div>
+          <div class="kpi-body">
+            <p class="kpi-label">Avg Expense</p>
+            <p class="kpi-value" id="kpi-expense-value">—</p>
+            <p class="kpi-delta neutral"><i data-lucide="activity" aria-hidden="true"></i> Per Patient</p>
+          </div>
+        </div>
+        <div class="kpi-card" id="kpi-gap" aria-label="Average Coverage Gap">
+          <div class="kpi-icon kpi-amber"><i data-lucide="shield-alert" aria-hidden="true"></i></div>
+          <div class="kpi-body">
+            <p class="kpi-label">Avg Coverage Gap</p>
+            <p class="kpi-value" id="kpi-gap-value">—</p>
+            <p class="kpi-delta warning"><i data-lucide="alert-triangle" aria-hidden="true"></i> Needs Attention</p>
+          </div>
+        </div>
+        <div class="kpi-card" id="kpi-states" aria-label="States Covered">
+          <div class="kpi-icon kpi-emerald"><i data-lucide="map-pin" aria-hidden="true"></i></div>
+          <div class="kpi-body">
+            <p class="kpi-label">States Covered</p>
+            <p class="kpi-value" id="kpi-states-value">—</p>
+            <p class="kpi-delta positive"><i data-lucide="globe" aria-hidden="true"></i> Geographic Reach</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Charts Row 1 -->
+      <div class="charts-grid-2">
+        <div class="chart-card">
+          <div class="chart-header">
+            <h2 class="chart-title">
+              <i data-lucide="bar-chart-3" aria-hidden="true"></i>
+              Expense by State
+            </h2>
+            <span class="chart-badge">Top 10</span>
+          </div>
+          <div class="chart-container">
+            <canvas id="chart-state" aria-label="Average expense by state bar chart" role="img"></canvas>
+          </div>
+        </div>
+
+        <div class="chart-card">
+          <div class="chart-header">
+            <h2 class="chart-title">
+              <i data-lucide="pie-chart" aria-hidden="true"></i>
+              Coverage Status
+            </h2>
+            <span class="chart-badge">Split</span>
+          </div>
+          <div class="chart-container chart-container--doughnut">
+            <canvas id="chart-coverage" aria-label="Coverage status doughnut chart" role="img"></canvas>
+          </div>
+          <div class="coverage-legend" id="coverage-legend"></div>
+        </div>
+      </div>
+
+      <!-- Charts Row 2 -->
+      <div class="charts-grid-3">
+        <div class="chart-card">
+          <div class="chart-header">
+            <h2 class="chart-title">
+              <i data-lucide="users" aria-hidden="true"></i>
+              Gender Distribution
+            </h2>
+          </div>
+          <div class="chart-container chart-container--sm">
+            <canvas id="chart-gender" aria-label="Gender distribution pie chart" role="img"></canvas>
+          </div>
+        </div>
+
+        <div class="chart-card">
+          <div class="chart-header">
+            <h2 class="chart-title">
+              <i data-lucide="calendar" aria-hidden="true"></i>
+              Age Groups
+            </h2>
+          </div>
+          <div class="chart-container chart-container--sm">
+            <canvas id="chart-age" aria-label="Age groups bar chart" role="img"></canvas>
+          </div>
+        </div>
+
+        <div class="chart-card">
+          <div class="chart-header">
+            <h2 class="chart-title">
+              <i data-lucide="heart-pulse" aria-hidden="true"></i>
+              Conditions
+            </h2>
+          </div>
+          <div class="chart-container chart-container--sm">
+            <canvas id="chart-condition" aria-label="Medical conditions bar chart" role="img"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Top 10 Patients Table -->
+      <div class="table-card">
+        <div class="table-header">
+          <h2 class="chart-title">
+            <i data-lucide="list-ordered" aria-hidden="true"></i>
+            Top 10 High-Expense Patients
+          </h2>
+          <button class="btn-secondary" id="btn-export" aria-label="Export patient data">
+            <i data-lucide="download" aria-hidden="true"></i>
+            Export CSV
+          </button>
+        </div>
+        <div class="table-wrapper" role="region" aria-label="High expense patients table">
+          <table class="data-table" id="top10-table" aria-live="polite">
+            <thead>
+              <tr>
+                <th scope="col">Patient ID</th>
+                <th scope="col">State</th>
+                <th scope="col">Gender</th>
+                <th scope="col">Condition</th>
+                <th scope="col">Expense</th>
+                <th scope="col">Coverage Gap</th>
+                <th scope="col">Risk</th>
+              </tr>
+            </thead>
+            <tbody id="top10-body">
+              <tr class="skeleton-row">
+                <td colspan="7">
+                  <div class="skeleton"></div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- PATIENTS TAB -->
+    <section id="panel-patients" class="tab-panel" role="tabpanel" aria-labelledby="tab-patients">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Patient Records</h1>
+          <p class="page-subtitle">Searchable, filterable patient dataset from Amazon S3</p>
+        </div>
+        <div class="search-bar">
+          <i data-lucide="search" aria-hidden="true"></i>
+          <input type="search" id="patient-search" placeholder="Search by ID, state, condition…"
+            aria-label="Search patients" />
+        </div>
+      </div>
+
+      <div class="filter-bar" role="group" aria-label="Patient filters">
+        <select id="filter-gender" class="select-input" aria-label="Filter by gender">
+          <option value="">All Genders</option>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+        </select>
+        <select id="filter-state" class="select-input" aria-label="Filter by state">
+          <option value="">All States</option>
+        </select>
+        <select id="filter-condition" class="select-input" aria-label="Filter by condition">
+          <option value="">All Conditions</option>
+        </select>
+        <button class="btn-ghost" id="btn-clear-filters" aria-label="Clear all filters">
+          <i data-lucide="x" aria-hidden="true"></i>
+          Clear Filters
+        </button>
+        <span class="filter-count" id="filter-count" aria-live="polite">— records</span>
+      </div>
+
+      <div class="table-card">
+        <div class="table-wrapper" role="region" aria-label="Full patient records table">
+          <table class="data-table" id="patients-table">
+            <thead>
+              <tr>
+                <th scope="col" data-sort="PatientID" tabindex="0">Patient ID <i data-lucide="chevrons-up-down"
+                    aria-hidden="true"></i></th>
+                <th scope="col" data-sort="Age" tabindex="0">Age <i data-lucide="chevrons-up-down"
+                    aria-hidden="true"></i></th>
+                <th scope="col" data-sort="Gender" tabindex="0">Gender</th>
+                <th scope="col" data-sort="Race" tabindex="0">Race</th>
+                <th scope="col" data-sort="State" tabindex="0">State</th>
+                <th scope="col" data-sort="Condition" tabindex="0">Condition</th>
+                <th scope="col" data-sort="Expense" tabindex="0">Expense <i data-lucide="chevrons-up-down"
+                    aria-hidden="true"></i></th>
+                <th scope="col" data-sort="CoverageGap" tabindex="0">Coverage Gap <i data-lucide="chevrons-up-down"
+                    aria-hidden="true"></i></th>
+              </tr>
+            </thead>
+            <tbody id="patients-body">
+              <tr class="skeleton-row">
+                <td colspan="8">
+                  <div class="skeleton"></div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="pagination" id="pagination" role="navigation" aria-label="Patient table pagination"></div>
+      </div>
+    </section>
+
+    <!-- CHAT TAB -->
+    <section id="panel-chat" class="tab-panel" role="tabpanel" aria-labelledby="tab-chat">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">AI Healthcare Agent</h1>
+          <p class="page-subtitle">Powered by Amazon Bedrock · Claude 3 Sonnet · Natural language analytics</p>
+        </div>
+        <button class="btn-secondary" id="btn-clear-chat" aria-label="Clear conversation">
+          <i data-lucide="trash-2" aria-hidden="true"></i>
+          Clear
+        </button>
+      </div>
+
+      <div class="chat-layout">
+        <!-- Suggestions Sidebar -->
+        <aside class="chat-sidebar" aria-label="Suggested queries">
+          <h3 class="sidebar-title">
+            <i data-lucide="sparkles" aria-hidden="true"></i>
+            Suggested Queries
+          </h3>
+          <div class="suggestion-list" id="suggestion-list" role="list">
+            <button class="suggestion-item" role="listitem">Who are the top 10 expensive patients?</button>
+            <button class="suggestion-item" role="listitem">Show me patients with coverage gaps</button>
+            <button class="suggestion-item" role="listitem">Average expense by state</button>
+            <button class="suggestion-item" role="listitem">What is the gender distribution?</button>
+            <button class="suggestion-item" role="listitem">Show age group breakdown</button>
+            <button class="suggestion-item" role="listitem">How many total patients?</button>
+            <button class="suggestion-item" role="listitem">List conditions and disease counts</button>
+            <button class="suggestion-item" role="listitem">What is the average coverage gap?</button>
+          </div>
+
+          <div class="agent-info">
+            <div class="agent-info-header">
+              <div class="agent-avatar" aria-hidden="true">
+                <i data-lucide="bot" aria-hidden="true"></i>
+              </div>
+              <div>
+                <p class="agent-name">HealthAI Agent</p>
+                <p class="agent-model">Claude 3 Sonnet via Bedrock</p>
+              </div>
+            </div>
+            <p class="agent-desc">Ask questions about your patient dataset in plain English. The agent analyzes data and
+              provides structured insights.</p>
+          </div>
+        </aside>
+
+        <!-- Chat Window -->
+        <div class="chat-window">
+          <div class="chat-messages" id="chat-messages" role="log" aria-live="polite" aria-label="Conversation history">
+            <!-- Welcome Message -->
+            <div class="message message-ai">
+              <div class="message-avatar" aria-hidden="true">
+                <i data-lucide="bot" aria-hidden="true"></i>
+              </div>
+              <div class="message-content">
+                <div class="message-bubble">
+                  <p>👋 Hello! I'm your <strong>Healthcare AI Agent</strong> powered by Amazon Bedrock and Claude 3
+                    Sonnet.</p>
+                  <p style="margin-top:8px">I can analyze your patient dataset and answer questions about:</p>
+                  <ul class="message-list">
+                    <li>Patient expenses and coverage gaps</li>
+                    <li>Demographic breakdowns</li>
+                    <li>State-level analytics</li>
+                    <li>Medical conditions distribution</li>
+                  </ul>
+                  <p style="margin-top:8px">Try asking a question or select one from the suggestions →</p>
+                </div>
+                <span class="message-time">Just now</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="chat-input-area">
+            <div class="chat-input-wrapper">
+              <textarea id="chat-input" class="chat-input" placeholder="Ask about patients, expenses, coverage gaps…"
+                rows="1" aria-label="Type your message" aria-multiline="true"></textarea>
+              <button class="btn-send" id="btn-send" aria-label="Send message">
+                <i data-lucide="send" aria-hidden="true"></i>
+              </button>
+            </div>
+            <p class="input-hint">Press <kbd>Enter</kbd> to send · <kbd>Shift+Enter</kbd> for new line</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- QUICKSIGHT TAB -->
+    <section id="panel-quicksight" class="tab-panel" role="tabpanel" aria-labelledby="tab-quicksight">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">QuickSight Dashboard</h1>
+          <p class="page-subtitle">Embedded Amazon QuickSight analytics · Live SPICE data</p>
+        </div>
+        <a class="btn-secondary" id="btn-open-qs" href="https://us-east-1.quicksight.aws.amazon.com/sn/account/AkashQS/embed/share/accounts/711560820682/dashboards/fa366757-9310-4a87-8950-3344d2eceb3c" target="_blank" rel="noopener noreferrer"
+          aria-label="Open QuickSight in new tab">
+          <i data-lucide="external-link" aria-hidden="true"></i>
+          Open in QuickSight
+        </a>
+      </div>
+      <div class="qs-container" style="display: flex; align-items: center; justify-content: center; width: 100%; height: calc(100vh - var(--nav-h) - 170px); min-height: 550px; padding: 8px;">
+        <iframe
+            style="border: none; border-radius: 12px; width: 100%; height: 100%; max-width: 1200px; box-shadow: var(--shadow-lg); background: #fff;"
+            src="https://us-east-1.quicksight.aws.amazon.com/sn/account/AkashQS/embed/share/accounts/711560820682/dashboards/fa366757-9310-4a87-8950-3344d2eceb3c"
+            allowfullscreen>
+        </iframe>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Toast Notification -->
+  <div class="toast" id="toast" role="alert" aria-live="assertive" aria-atomic="true"></div>
+
+  <!-- Loading Overlay -->
+  <div class="loading-overlay hidden" id="loading-overlay" aria-hidden="true">
+    <div class="loading-spinner">
+      <div class="spinner-ring"></div>
+      <p>Loading data…</p>
+    </div>
+  </div>
+
+  <script src="components/charts.js?v=1.1"></script>
+  <script src="components/table.js?v=1.1"></script>
+  <script src="components/chat.js?v=1.1"></script>
+  <script src="app.js?v=1.1"></script>
+</body>
+
+</html>

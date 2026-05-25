@@ -1,0 +1,32 @@
+########################################################################
+# terraform.tfvars  –  Fill in your values, then:
+#   terraform init
+#   terraform plan
+#   terraform apply
+#
+# SECURITY: Add terraform.tfvars to .gitignore — never commit secrets!
+########################################################################
+
+aws_region     = "us-east-1"
+environment    = "dev"
+
+# ── Paste your IAM / STS credentials here ────────────────────────────
+# Your keys start with ASIA* = temporary STS tokens, so you MUST also
+# fill in aws_session_token below.
+aws_access_key    = "ASIAR5HMQJQX..."          # ← replace
+aws_secret_key    = "6Y9QCmDKv8IM..."          # ← replace
+aws_session_token = "IQoJb3JpZ2lu..."          # ← replace (the long token string)
+
+# ── S3 ────────────────────────────────────────────────────────────────
+# Must be globally unique – add your name or account ID suffix
+s3_bucket_name = "healthcare-ai-agent-data-demo-123456"
+
+# ── Bedrock ───────────────────────────────────────────────────────────
+agent_name       = "HealthcareAIAgent"
+foundation_model = "anthropic.claude-3-sonnet-20240229-v1:0"
+
+# ── QuickSight ────────────────────────────────────────────────────────
+# Run this to find your QuickSight username:
+#   aws quicksight list-users --aws-account-id <ACCOUNT_ID> --namespace default
+quicksight_user = "your-iam-username"
+dataset_name    = "PatientHealthcareDataset"

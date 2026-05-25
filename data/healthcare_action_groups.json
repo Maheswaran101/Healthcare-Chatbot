@@ -1,0 +1,150 @@
+{
+  "actionGroups": [
+    {
+      "name": "HealthcarePatientActions",
+      "description": "Patient-facing tools for summaries, billing, appointments, lab reports, admission status, prescriptions, and insurance.",
+      "functions": [
+        {
+          "name": "get_patient_summary",
+          "description": "Get a structured patient summary by Patient ID, name, DOB, or phone number.",
+          "parameters": {
+            "patient_id": { "type": "string", "required": false },
+            "patient_name": { "type": "string", "required": false },
+            "dob": { "type": "string", "required": false },
+            "phone": { "type": "string", "required": false }
+          }
+        },
+        {
+          "name": "get_patient_billing",
+          "description": "Get billing amount and insurance provider details for a patient.",
+          "parameters": {
+            "patient_id": { "type": "string", "required": false },
+            "patient_name": { "type": "string", "required": false },
+            "dob": { "type": "string", "required": false },
+            "phone": { "type": "string", "required": false }
+          }
+        },
+        {
+          "name": "get_patient_appointments",
+          "description": "Get appointment or admission-date details for a patient from available dataset columns.",
+          "parameters": {
+            "patient_id": { "type": "string", "required": false },
+            "patient_name": { "type": "string", "required": false }
+          }
+        },
+        {
+          "name": "get_lab_reports",
+          "description": "Get lab or test result details for a patient.",
+          "parameters": {
+            "patient_id": { "type": "string", "required": false },
+            "patient_name": { "type": "string", "required": false }
+          }
+        },
+        {
+          "name": "get_admission_status",
+          "description": "Get admission, room, discharge, and current status for a patient.",
+          "parameters": {
+            "patient_id": { "type": "string", "required": false },
+            "patient_name": { "type": "string", "required": false }
+          }
+        },
+        {
+          "name": "get_discharge_summary",
+          "description": "Get diagnosis, treatment, medication, and discharge details for a patient.",
+          "parameters": {
+            "patient_id": { "type": "string", "required": false },
+            "patient_name": { "type": "string", "required": false }
+          }
+        },
+        {
+          "name": "get_prescription_history",
+          "description": "Get medication/prescription history for a patient.",
+          "parameters": {
+            "patient_id": { "type": "string", "required": false },
+            "patient_name": { "type": "string", "required": false }
+          }
+        },
+        {
+          "name": "get_insurance_details",
+          "description": "Get patient insurance details, or provider distribution when no patient is specified.",
+          "parameters": {
+            "patient_id": { "type": "string", "required": false },
+            "patient_name": { "type": "string", "required": false }
+          }
+        }
+      ]
+    },
+    {
+      "name": "HealthcareDoctorActions",
+      "description": "Doctor-facing tools for appointments, disease statistics, ICU patients, critical alerts, and record search.",
+      "functions": [
+        {
+          "name": "get_today_appointments",
+          "description": "Get today's appointment/admission records, optionally filtered by doctor or hospital.",
+          "parameters": {
+            "doctor": { "type": "string", "required": false },
+            "hospital": { "type": "string", "required": false }
+          }
+        },
+        {
+          "name": "get_disease_statistics",
+          "description": "Get disease or diagnosis distribution from healthcare records.",
+          "parameters": {
+            "period": { "type": "string", "required": false, "default": "all_time" }
+          }
+        },
+        {
+          "name": "get_icu_patients",
+          "description": "Search available dataset columns for ICU or intensive-care patient records.",
+          "parameters": {}
+        },
+        {
+          "name": "get_critical_alerts",
+          "description": "Get emergency admissions or abnormal/critical test result records.",
+          "parameters": {}
+        },
+        {
+          "name": "search_healthcare_records",
+          "description": "Search dynamically across all healthcare dataset columns.",
+          "parameters": {
+            "query": { "type": "string", "required": false },
+            "column": { "type": "string", "required": false },
+            "limit": { "type": "integer", "required": false, "default": 25 }
+          }
+        }
+      ]
+    },
+    {
+      "name": "HealthcareAdminActions",
+      "description": "Admin and hospital-management analytics for doctors, disease mix, revenue, insurance, and trends.",
+      "functions": [
+        {
+          "name": "get_doctor_analytics",
+          "description": "Get doctor appointment/admission workload and revenue analytics.",
+          "parameters": {
+            "period": { "type": "string", "required": false, "default": "all_time" }
+          }
+        },
+        {
+          "name": "get_revenue_analytics",
+          "description": "Get billing/revenue analytics from healthcare records.",
+          "parameters": {
+            "period": { "type": "string", "required": false, "default": "all_time" }
+          }
+        },
+        {
+          "name": "get_disease_statistics",
+          "description": "Get disease or diagnosis distribution from healthcare records.",
+          "parameters": {
+            "period": { "type": "string", "required": false, "default": "all_time" }
+          }
+        },
+        {
+          "name": "get_insurance_details",
+          "description": "Get insurance provider distribution across records.",
+          "parameters": {}
+        }
+      ]
+    }
+  ]
+}

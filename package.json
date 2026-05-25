@@ -1,0 +1,8 @@
+{
+  "name": "healthcare-ai-dashboard",
+  "private": true,
+  "scripts": {
+    "start": "python server.py",
+    "dev": "python server.py"
+  }
+}

@@ -1,0 +1,204 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Dynamic Healthcare Agent Action Groups",
+    "version": "3.0.0"
+  },
+  "paths": {
+    "/get_patient_summary": {
+      "post": {
+        "operationId": "get_patient_summary",
+        "description": "Get a structured patient summary by Patient ID, name, DOB, or phone number.",
+        "requestBody": { "$ref": "#/components/requestBodies/PatientLookup" },
+        "responses": { "200": { "description": "Tool response" } }
+      }
+    },
+    "/get_patient_billing": {
+      "post": {
+        "operationId": "get_patient_billing",
+        "description": "Get billing amount and insurance provider details for a patient.",
+        "requestBody": { "$ref": "#/components/requestBodies/PatientLookup" },
+        "responses": { "200": { "description": "Tool response" } }
+      }
+    },
+    "/get_patient_appointments": {
+      "post": {
+        "operationId": "get_patient_appointments",
+        "description": "Get appointment or admission-date details for a patient from available dataset columns.",
+        "requestBody": { "$ref": "#/components/requestBodies/PatientLookup" },
+        "responses": { "200": { "description": "Tool response" } }
+      }
+    },
+    "/get_today_appointments": {
+      "post": {
+        "operationId": "get_today_appointments",
+        "description": "Get today's appointment/admission records, optionally filtered by doctor or hospital.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "doctor": { "type": "string" },
+                  "hospital": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": { "200": { "description": "Tool response" } }
+      }
+    },
+    "/get_doctor_analytics": {
+      "post": {
+        "operationId": "get_doctor_analytics",
+        "description": "Get doctor appointment/admission workload and revenue analytics.",
+        "requestBody": { "$ref": "#/components/requestBodies/PeriodFilter" },
+        "responses": { "200": { "description": "Tool response" } }
+      }
+    },
+    "/get_disease_statistics": {
+      "post": {
+        "operationId": "get_disease_statistics",
+        "description": "Get disease or diagnosis distribution from healthcare records.",
+        "requestBody": { "$ref": "#/components/requestBodies/PeriodFilter" },
+        "responses": { "200": { "description": "Tool response" } }
+      }
+    },
+    "/get_lab_reports": {
+      "post": {
+        "operationId": "get_lab_reports",
+        "description": "Get lab or test result details for a patient.",
+        "requestBody": { "$ref": "#/components/requestBodies/PatientLookup" },
+        "responses": { "200": { "description": "Tool response" } }
+      }
+    },
+    "/get_admission_status": {
+      "post": {
+        "operationId": "get_admission_status",
+        "description": "Get admission, room, discharge, and current status for a patient.",
+        "requestBody": { "$ref": "#/components/requestBodies/PatientLookup" },
+        "responses": { "200": { "description": "Tool response" } }
+      }
+    },
+    "/get_discharge_summary": {
+      "post": {
+        "operationId": "get_discharge_summary",
+        "description": "Get diagnosis, treatment, medication, and discharge details for a patient.",
+        "requestBody": { "$ref": "#/components/requestBodies/PatientLookup" },
+        "responses": { "200": { "description": "Tool response" } }
+      }
+    },
+    "/search_healthcare_records": {
+      "post": {
+        "operationId": "search_healthcare_records",
+        "description": "Search dynamically across all healthcare dataset columns.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "query": { "type": "string" },
+                  "column": { "type": "string" },
+                  "limit": { "type": "integer", "default": 25, "minimum": 1, "maximum": 100 }
+                }
+              }
+            }
+          }
+        },
+        "responses": { "200": { "description": "Tool response" } }
+      }
+    },
+    "/get_prescription_history": {
+      "post": {
+        "operationId": "get_prescription_history",
+        "description": "Get medication/prescription history for a patient.",
+        "requestBody": { "$ref": "#/components/requestBodies/PatientLookup" },
+        "responses": { "200": { "description": "Tool response" } }
+      }
+    },
+    "/get_insurance_details": {
+      "post": {
+        "operationId": "get_insurance_details",
+        "description": "Get patient insurance details, or provider distribution when no patient is specified.",
+        "requestBody": { "$ref": "#/components/requestBodies/PatientLookup" },
+        "responses": { "200": { "description": "Tool response" } }
+      }
+    },
+    "/get_revenue_analytics": {
+      "post": {
+        "operationId": "get_revenue_analytics",
+        "description": "Get billing/revenue analytics from healthcare records.",
+        "requestBody": { "$ref": "#/components/requestBodies/PeriodFilter" },
+        "responses": { "200": { "description": "Tool response" } }
+      }
+    },
+    "/get_icu_patients": {
+      "post": {
+        "operationId": "get_icu_patients",
+        "description": "Search available dataset columns for ICU or intensive-care patient records.",
+        "requestBody": { "$ref": "#/components/requestBodies/EmptyBody" },
+        "responses": { "200": { "description": "Tool response" } }
+      }
+    },
+    "/get_critical_alerts": {
+      "post": {
+        "operationId": "get_critical_alerts",
+        "description": "Get emergency admissions or abnormal/critical test result records.",
+        "requestBody": { "$ref": "#/components/requestBodies/EmptyBody" },
+        "responses": { "200": { "description": "Tool response" } }
+      }
+    }
+  },
+  "components": {
+    "requestBodies": {
+      "PatientLookup": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "patient_id": { "type": "string" },
+                "patient_name": { "type": "string" },
+                "dob": { "type": "string" },
+                "phone": { "type": "string" }
+              }
+            }
+          }
+        }
+      },
+      "PeriodFilter": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "period": {
+                  "type": "string",
+                  "default": "all_time",
+                  "enum": ["all_time", "today", "current_month", "current_year"]
+                }
+              }
+            }
+          }
+        }
+      },
+      "EmptyBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          }
+        }
+      }
+    }
+  }
+}
