@@ -15,7 +15,7 @@ healthcare_dataset.csv
          ▼
   ┌──────────────────────────────────┐
   │  Amazon Bedrock Agent            │
-  │  Model: Claude 3 Sonnet          │
+  │  Model: AWS Novo Lite V1         │
   │  Instruction: Healthcare AI      │
   │  Session TTL: 10 min             │
   └──────────────────────────────────┘
